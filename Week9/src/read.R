@@ -89,16 +89,13 @@ df.c2 <- right_join(df.county, shp,by=c("STATEFP" = "STATEFP",
 
 
 df.illinois <- filter(df.c2, STATEFP=="17")
-dftest <- df.illinois[df.illinois$mmr>95.1,]
-hist(dftest$mmr)
 df.illinois$mmrclass <- cut(df.illinois$mmr, c(0,94,96, 98,100))
-df.county
-table(df.illinois$mmrclass)
-hist(df.illinois$mmr)
 
 ggplot(df.illinois)+
   geom_sf(aes(geometry=geometry,fill=mmrclass)) +
   coord_sf(crs=st_crs(3857))+
   ggthemes::theme_map()+
-labs(caption = "data: https://github.com/WSJ/measles-data\ncode: Pauloo, et al. 2017)")
+  scale_fill_brewer(palette=5, type="div", labels=c("<94%", "94-96%", "96-98%","98-100%"))+
+  ggtitle("Illinois MMR Vaccination Rate")+
+labs(caption = "data: https://github.com/WSJ/measles-data\ncode: https://github.com/MartinLBarron/TidyTuesdaySubmissions/tree/master/Week9")
 ggsave("Week9/output/tidy_tues_week9.png")
